@@ -1,6 +1,36 @@
 Despliegue automático Zabbix
 ---
 
+Organizacion del proyecto:
+```shell
+zabbix/
+├── README.md
+├── playbooks
+├── roles
+│   ├── install
+│   │   ├── tasks
+│   │   │   ├── config_locale_en_US.UTF-8.yml
+│   │   │   ├── config_mariadb.yml
+│   │   │   ├── config_php-cgi.yml
+│   │   │   ├── import_config_zabbix.yml
+│   │   │   ├── import_php_config.yml
+│   │   │   ├── install_dependencias_debian.yml
+│   │   │   ├── install_dependencias_redhat.yml
+│   │   │   ├── install_zabbix_debian.yml
+│   │   │   ├── install_zabbix_redhat.yml
+│   │   │   ├── main.yml
+│   │   │   ├── reload_agent.yml
+│   │   │   ├── reload_apache2.yml
+│   │   │   ├── reload_httpd.yml
+│   │   │   ├── reload_mariadb.yml
+│   │   │   └── reload_zabbix.yml
+│   │   └── templates
+│   │       ├── php.ini.j2
+│   │       └── zabbix_server.conf.j2
+│   └── remove
+└── run.yml
+```
+
 EJEMPLO MODO DE USO:
 ---
 ansible-playbook run.yml -e "Install=true" -e "dbname=" -e "dbuser=" -e "dbpass="
