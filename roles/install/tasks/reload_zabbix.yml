@@ -1,0 +1,5 @@
+- name: Reload Zabbix
+  service:
+    name: zabbix-server
+    state: restarted
+    enabled: yes

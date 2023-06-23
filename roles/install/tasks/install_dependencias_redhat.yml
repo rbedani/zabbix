@@ -1,0 +1,42 @@
+- name: Actualizar lista de paquetes
+  yum:
+    name: '*'
+    state: latest
+    update_cache: yes
+
+- name: Habilitar Repo-Extra
+  yum:
+    name:
+      - epel-release
+    state: present
+
+- name: Actualizar lista de paquetes
+  yum:
+    name: '*'
+    state: latest
+    update_cache: yes
+
+- name: Install Pre-Requisitos
+  dnf:
+    name:
+      - httpd
+      - mariadb
+      - mariadb-server
+      - php 
+      - php-fpm
+      - php-mysqlnd
+      - php-ldap
+      - php-bcmath
+      - php-mbstring
+      - php-gd
+      - php-pdo
+      - php-xml
+      - python3-pip
+
+    state: present
+
+- name: pip Install
+  pip:
+    name:
+      - pexpect
+    state: present

@@ -1,0 +1,42 @@
+- name: Actualizar lista de paquetes
+  apt:
+    update_cache: yes
+
+- name: Install Pre-Requisitos
+  apt:
+    name:
+      - apache2
+      - mariadb-server
+      - php
+      - php-cgi
+      - php-common
+      - php-mbstring
+      - php-net-socket
+      - php-net-socket
+      - php-gd
+      - php-xml
+      - php-xml-util
+      - php-mysql
+      - php-bcmath
+      - php-imap
+      - php-snmp
+      - php-ldap
+      - libapache2-mod-php
+      - python3-pip
+      - python3-pymysql
+      - python3-mysql.connector
+      - pkg-config
+      - libmysqlclient-dev
+      - default-libmysqlclient-dev
+      - vim
+      - nano
+      - htop
+    state: present
+
+- name: pip Install
+  pip:
+    name:
+      - pexpect
+      - mysqlclient
+      - pymysql
+    state: present

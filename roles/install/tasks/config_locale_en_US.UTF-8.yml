@@ -1,0 +1,20 @@
+- name: Purgar locales
+  apt:
+    name: locales
+    state: absent
+    purge: yes
+
+- name: Reinstalar locales
+  apt:
+    name: locales
+    state: present
+
+- name: Configura locale en_US.UTF-8
+  lineinfile:
+    path: /etc/locale.gen
+    line: 'en_US.UTF-8 UTF-8'
+    insertafter: EOF
+    state: present
+
+- name: Ejecutar locale-gen
+  command: locale-gen

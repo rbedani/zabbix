@@ -1,0 +1,34 @@
+---
+- name: Zabbix
+  #hosts: '{{ worker }}'
+  hosts: master
+  become: yes
+  vars:
+    ansible_become_password: "{{ ansible_ssh_pass }}"
+    dbname: zabbix
+    dbuser: zabbix
+    dbpass: zabbix
+
+  tasks:
+
+    - name: Importar Sites
+      template:
+        src: templates/proxyhttpd.conf.j2
+        dest: /etc/apache2/sites-available/zabbix.conf
+        mode: 0644
+
+    - name: Habilitar Sites
+      file:
+        src: /etc/apache2/sites-available/zabbix.conf
+        dest: /etc/apache2/sites-enabled/zabbix.conf
+        state: link
+
+    - name: Deshabilitar configuración por defecto de Nginx
+      file:
+        path: /etc/apache2/sites-enabled/000-default.conf
+        state: absent
+
+    - name: Reiniciar servicio de Apache2
+      service:
+        name: apache2
+        state: restarted

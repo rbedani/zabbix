@@ -1,0 +1,203 @@
+---
+- name: Zabbix
+  #hosts: '{{ worker }}'
+  hosts: master
+  become: yes
+  vars:
+    ansible_become_password: "{{ ansible_ssh_pass }}"
+    dbname: zabbix
+    dbuser: zabbix
+    dbpass: zabbix
+
+  tasks:
+
+### PRE-REQUISITOS
+
+    - name: Actualizar lista de paquetes
+      apt:
+        update_cache: yes
+
+    - name: Install Pre-Requisitos
+      apt:
+        name:
+          - apache2
+          - mariadb-server
+          - php
+          - php-cgi
+          - php-common
+          - php-mbstring
+          - php-net-socket
+          - php-net-socket
+          - php-gd
+          - php-xml
+          - php-xml-util
+          - php-mysql
+          - php-bcmath
+          - php-imap
+          - php-snmp
+          - php-ldap
+          - libapache2-mod-php
+          - python3-pip
+          - python3-pymysql
+          - python3-mysql.connector
+          - pkg-config
+          - libmysqlclient-dev
+          - default-libmysqlclient-dev
+          - vim
+          - nano
+          - htop
+        state: present
+
+    - name: pip Install
+      pip:
+        name:
+          - pexpect
+          - mysqlclient
+          - pymysql
+        state: present
+
+### CONFIGURACION LOCALE en_US.UTF-8
+
+    - name: Purgar locales
+      apt:
+        name: locales
+        state: absent
+        purge: yes
+
+    - name: Reinstalar locales
+      apt:
+        name: locales
+        state: present
+
+    - name: Configura locale en_US.UTF-8
+      lineinfile:
+        path: /etc/locale.gen
+        line: 'en_US.UTF-8 UTF-8'
+        insertafter: EOF
+        state: present
+
+    - name: Ejecutar locale-gen
+      command: locale-gen
+
+### RELOAD APACHE2
+
+    - name: Reload Apache
+      service:
+        name: apache2
+        state: restarted
+        enabled: yes
+
+### RELOAD MARIADB
+
+    - name: Reload MariaDB
+      service:
+        name: mariadb
+        state: restarted
+        enabled: yes
+
+### PHP-CGI
+
+    - name: Configurando php
+      command: a2enconf php8.1-cgi
+
+### IMPORT PHP CONFIG
+
+    - name: Importar php.ini
+      template:
+        src: templates/php.ini.j2
+        dest: /etc/php/8.1/apache2/php.ini
+        mode: 0660
+ 
+### DOWNLOAD AND INSTALL ZABBIX 
+
+    - name: Descargar del asistente del repositorio ZABBIX
+      get_url:
+        url: https://repo.zabbix.com/zabbix/6.5/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.5-1%2Bubuntu22.04_all.deb
+        dest: /tmp/install_repo_zabbix.deb
+
+    - name: Instalar repo Zabbix
+      apt:
+        deb: /tmp/install_repo_zabbix.deb
+        state: present
+
+    - name: Actualizar lista de paquetes
+      apt:
+        update_cache: yes
+
+    - name: Install Modules Zabbix
+      apt:
+        name:
+          - zabbix-server-mysql
+          - zabbix-frontend-php
+          - zabbix-apache-conf
+          - zabbix-sql-scripts
+          - zabbix-agent
+        state: present
+
+### IMPORT CONFIG ZABBIX
+
+    - name: Importar zabbix_server.conf
+      template:
+        src: templates/zabbix_server.conf.j2
+        dest: /etc/zabbix/zabbix_server.conf
+        mode: 0660
+
+### CONFIGURANDO BASE DE DATOS MARIADB
+
+    - name: Eliminar base de datos existente
+      mysql_db:
+        name: "{{ dbname }}"
+        state: absent
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+
+    - name: Nueva base de datos
+      mysql_db:
+        name: "{{ dbname }}"
+        state: present
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+
+    - name: Otorgar permisos
+      mysql_user:
+        name: "{{ dbuser }}"
+        password: "{{ dbpass }}"
+        priv: "{{ dbname }}.*:ALL"
+        state: present
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+
+    - name: Descomprimir archivo gz
+      shell: zcat /usr/share/zabbix-sql-scripts/mysql/server.sql.gz > /tmp/server.sql
+      args:
+        executable: /bin/bash
+
+    - name: Cargar archivo en la base de datos
+      mysql_db:
+        name: "{{ dbname }}"
+        state: import
+        target: /tmp/server.sql
+        login_user: "{{ dbuser }}"
+        login_password: "{{ dbpass }}"
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+
+### RELOAD ZABBIX
+
+    - name: Reload Zabbix
+      service:
+        name: zabbix-server
+        state: restarted
+        enabled: yes
+
+### RELOAD AGENT
+
+    - name: Reload Agent
+      service:
+        name: zabbix-agent
+        state: restarted
+        enabled: yes
+
+### RELOAD APACHE
+
+    - name: Reload Apache
+      service:
+        name: apache2
+        state: restarted
+        enabled: yes

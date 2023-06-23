@@ -1,0 +1,13 @@
+- name: zabbix
+  command: systemctl status zabbix-server
+  register: zabbix_status
+
+  debug:
+    var: zabbix_status
+
+- name: agent
+  command: systemctl status zabbix-agent
+  register: agent_status
+
+  debug:
+    var: agent_status

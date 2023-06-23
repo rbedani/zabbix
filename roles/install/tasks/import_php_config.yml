@@ -1,0 +1,5 @@
+- name: Importar php.ini
+  template:
+    src: templates/php.ini.j2
+    dest: /etc/php/8.1/apache2/php.ini
+    mode: 0660
