@@ -13,62 +13,50 @@
 
 - name: INSTALL DEPENDENCIAS
   include_tasks: install_dependencias_debian.yml
-    become: yes
   when: ansible_os_family == "Debian"
 
 - name: CONFIGURACION LOCALE en_US.UTF-8
   include_tasks: config_locale_en_US.UTF-8.yml
-    become: yes
   when: ansible_os_family == "Debian"
 
 - name: RELOAD APACHE2
   include_tasks: reload_apache2.yml
-    become: yes
   when: ansible_os_family == "Debian"
 
 - name: RELOAD MARIADB
   include_tasks: reload_mariadb.yml
-    become: yes
   when: ansible_os_family == "Debian"
 
 - name: PHP-CGI
   include_tasks: config_php-cgi.yml
-    become: yes
   when: ansible_os_family == "Debian"
 
 - name: IMPORT PHP CONFIG
   include_tasks: import_php_config.yml
-    become: yes
   when: ansible_os_family == "Debian"
 
 - name: DOWNLOAD AND INSTALL ZABBIX 
   include_tasks: install_zabbix_debian.yml
-    become: yes
   when: ansible_os_family == "Debian"
 
 - name: IMPORT CONFIG ZABBIX 
   include_tasks: import_config_zabbix.yml
-    become: yes
   when: ansible_os_family == "Debian"
 
 - name: CONFIG MARIADB
   include_tasks: config_mariadb.yml
-    become: yes
   when: ansible_os_family == "Debian"
 
 - name: RELOAD ZABBIX
   include_tasks: reload_zabbix.yml
-    become: yes
   when: ansible_os_family == "Debian"
 
 - name: RELOAD AGENT
   include_tasks: reload_agent.yml
-    become: yes
   when: ansible_os_family == "Debian"
 
 - name: RELOAD APACHE2
   include_tasks: reload_apache2.yml
-    become: yes
   when: ansible_os_family == "Debian"
 
 

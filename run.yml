@@ -1,6 +1,7 @@
 ---
 - name: Zabbix
   hosts: all
+  become: yes
 #  vars:
 #    ansible_become_password: "{{ ansible_ssh_pass }}"
 
