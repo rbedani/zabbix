@@ -10,19 +10,19 @@
   - name: Install
     include_role:
       name: install
-    when: tasks_type = install
+    when: tasks_type == "install"
 
   - name: Remove
     include_role:
       name: remove
-    when: tasks_type = remove
+    when: tasks_type == "remove"
 
   - name: Status
     include_role:
       name: status
-    when: tasks_type = status
+    when: tasks_type == "status"
 
   - name: Adduser
     include_role:
       name: adduser
-    when: tasks_type = adduser
+    when: tasks_type == "adduser"
