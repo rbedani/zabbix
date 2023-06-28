@@ -43,6 +43,9 @@ ansible-playbook run.yml -e "Install=true" -e "dbname=" -e "dbuser=" -e "dbpass=
 | dbname= | insertar el nombre de la base de datos |
 | dbuser= | insertar el nombre del usuario para la base de datos |
 | dbpass= | insertar el password para usuario de la base de datos |
+| adduser= | permite crear un usuario en una instancia ya pre-instalada de zabbix |
+| add_user_name= | permite crear un usuario en una instancia ya pre-instalada de zabbix |
+| add_user_pass= | define la password del usuario que desea agregar |
 
 
 Sistema Operativos soportados:

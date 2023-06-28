@@ -1,6 +1,5 @@
 ---
 - name: Zabbix
-  hosts: master #'{{ worker }}'
   become: yes
   vars:
     ansible_become_password: "{{ ansible_ssh_pass }}"
@@ -10,9 +9,19 @@
   - name: Install
     include_role:
       name: install
-    when: install | default(False)
+    when: tasks_type = install | default(False)
 
   - name: Remove
     include_role:
       name: remove
-    when: remove | default(False)
+    when: tasks_type = remove | default(False)
+
+  - name: Status
+    include_role:
+      name: status
+    when: tasks_type = status | default(False)
+
+  - name: Adduser
+    include_role:
+      name: adduser
+    when: tasks_type = adduser | default(False)
