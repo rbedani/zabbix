@@ -1,5 +1,0 @@
----
-collections:
-  - name: https://github.com/ansible-collections/community.mysql/blob/b79fd94d51eb986f413e4e6778d45ab9944ff653/plugins/modules/mysql_db.py
-    type: git
-    
