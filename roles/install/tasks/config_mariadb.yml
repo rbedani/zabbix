@@ -3,6 +3,7 @@
     name: "{{ dbname }}"
     state: absent
     login_unix_socket: /var/run/mysqld/mysqld.sock
+  delegate_to: localhost
 
 - name: Nueva base de datos
   mysql_db:
