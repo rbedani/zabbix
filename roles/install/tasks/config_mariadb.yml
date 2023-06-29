@@ -3,6 +3,8 @@
     name: "{{ dbname }}"
     state: absent
     login_unix_socket: /var/run/mysqld/mysqld.sock
+  become: true
+  become_user: root
 
 - name: Nueva base de datos
   mysql_db:
