@@ -6,6 +6,7 @@
     state: absent
     #login_unix_socket: /var/run/mysqld/mysqld.sock
     config_file: /etc/mysql/my.cnf
+  become: true
 
 - name: Nueva base de datos
   mysql_db:
