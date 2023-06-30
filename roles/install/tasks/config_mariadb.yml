@@ -1,11 +1,11 @@
 - name: Eliminar base de datos existente
   mysql_db:
+    login_user: root
+    login_password: "{{ ansible_ssh_pass }}"
     name: "{{ dbname }}"
     state: absent
     login_unix_socket: /var/run/mysqld/mysqld.sock
     config_file: /etc/mysql/my.cnf
-  become: true
-  become_user: root
 
 - name: Nueva base de datos
   mysql_db:
