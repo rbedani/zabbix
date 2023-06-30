@@ -1,16 +1,15 @@
 - name: Eliminar base de datos existente
   mysql_db:
     login_user: root
-    login_password: "FlexxDeploy7!"
+    login_password: "{{ ansible_ssh_pass }}"
     name: "{{ dbname }}"
     state: absent
     login_unix_socket: /var/run/mysqld/mysqld.sock
   
-
 - name: Nueva base de datos
   mysql_db:
     login_user: root
-    login_password: "FlexxDeploy7!"
+    login_password: "{{ ansible_ssh_pass }}"
     name: "{{ dbname }}"
     state: present
     login_unix_socket: /var/run/mysqld/mysqld.sock
