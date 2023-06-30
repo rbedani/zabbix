@@ -2,19 +2,19 @@
   get_url:
     url: https://repo.zabbix.com/zabbix/6.5/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.5-1+2Bubuntu22.04_all.deb
     dest: /tmp/install_repo_zabbix.deb
-  when: "{{ version}}" == "7.0"
+  when: version == '7.0'
 
 - name: Descargar del asistente del repositorio ZABBIX
   get_url:
     url: https://repo.zabbix.com/zabbix/6.4/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.4-1+ubuntu22.04_all.deb
     dest: /tmp/install_repo_zabbix.deb
-  when: "{{ version}}" == "6.4"
+  when: version == '6.4'
 
 - name: Descargar del asistente del repositorio ZABBIX
   get_url:
     url: https://repo.zabbix.com/zabbix/6.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_6.0-4+ubuntu22.04_all.deb
     dest: /tmp/install_repo_zabbix.deb
-  when: "{{ version}}" == "6.0"
+  when: version == '6.0'
 
 - name: Instalar repo Zabbix
   apt:
