@@ -2,9 +2,7 @@
   mysql_db:
     name: "{{ dbname }}"
     state: absent
-    login_unix_socket: /var/run/mysqld/mysqld.sock
-  become: true
-  become_user: root
+    config_file: /etc/mysql/my.cnf
 
 - name: Nueva base de datos
   mysql_db:
