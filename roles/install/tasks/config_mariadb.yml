@@ -17,6 +17,8 @@
 
 - name: Otorgar permisos
   mysql_user:
+    login_user: root
+    login_password: "{{ ansible_ssh_pass }}"
     name: "{{ dbuser }}"
     password: "{{ dbpass }}"
     priv: "{{ dbname }}.*:ALL"
