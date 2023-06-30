@@ -6,17 +6,15 @@
     state: absent
     login_unix_socket: /var/run/mysqld/mysqld.sock
     config_file: /etc/mysql/my.cnf
+    check_implicit_admin: true
   become_method: sudo
+  
 
 - name: Nueva base de datos
   mysql_db:
-    check_implicit_admin: true
-    login_user: root
-    login_password: "{{ ansible_ssh_pass }}"
     name: "{{ dbname }}"
     state: present
     login_unix_socket: /var/run/mysqld/mysqld.sock
-    config_file: /etc/mysql/my.cnf
 
 - name: Otorgar permisos
   mysql_user:
@@ -25,7 +23,6 @@
     priv: "{{ dbname }}.*:ALL"
     state: present
     login_unix_socket: /var/run/mysqld/mysqld.sock
-    config_file: /etc/mysql/my.cnf
 
 - name: Descomprimir archivo gz
   shell: zcat /usr/share/zabbix-sql-scripts/mysql/server.sql.gz > /tmp/server.sql
@@ -40,4 +37,3 @@
     login_user: "{{ dbuser }}"
     login_password: "{{ dbpass }}"
     login_unix_socket: /var/run/mysqld/mysqld.sock
-    config_file: /etc/mysql/my.cnf
