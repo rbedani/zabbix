@@ -10,6 +10,7 @@
 
 - name: Nueva base de datos
   mysql_db:
+    check_implicit_admin: true
     login_user: root
     login_password: "{{ ansible_ssh_pass }}"
     name: "{{ dbname }}"
