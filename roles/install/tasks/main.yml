@@ -44,8 +44,18 @@
   when: ansible_os_family == "Debian"
 
 - name: CONFIG MARIADB
-  include_tasks: config_mariadb.yml
-  when: ansible_os_family == "Debian"
+  include_tasks: config_mariadb_7.0.yml
+  when: ansible_os_family == "Debian" and version == '7.0'
+
+- name: CONFIG MARIADB
+  include_tasks: config_mariadb_6.4.yml
+  when: ansible_os_family == "Debian" and version == '6.4'
+
+- name: CONFIG MARIADB
+  include_tasks: config_mariadb_6.0.yml
+  when: ansible_os_family == "Debian" and version == '6.0'
+
+
 
 - name: RELOAD ZABBIX
   include_tasks: reload_zabbix.yml

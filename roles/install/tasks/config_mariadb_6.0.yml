@@ -1,0 +1,49 @@
+- name: Eliminar base de datos existente
+  mysql_db:
+    login_user: root
+    login_password: "{{ ansible_ssh_pass }}"
+    name: "{{ dbname }}"
+    state: absent
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+  
+- name: Nueva base de datos
+  mysql_db:
+    login_user: root
+    login_password: "{{ ansible_ssh_pass }}"
+    name: "{{ dbname }}"
+    state: present
+    collation: utf8mb4_bin
+    encoding: utf8mb4
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+
+- name: Otorgar permisos
+  mysql_user:
+    login_user: root
+    login_password: "{{ ansible_ssh_pass }}"
+    name: "{{ dbuser }}"
+    password: "{{ dbpass }}"
+    priv: "{{ dbname }}.*:ALL"
+    state: present
+    append_privs: yes
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+
+- name: Habilitar log_bin_trust_function_creators
+  mysql_global_variables:
+    name: log_bin_trust_function_creators
+    value: 1
+    login_user: root
+    login_password: password
+
+- name: Descomprimir archivo gz
+  shell: zcat /usr/share/zabbix-sql-scripts/mysql/server.sql.gz > /tmp/server.sql
+  args:
+    executable: /bin/bash
+
+- name: Cargar archivo en la base de datos
+  mysql_db:
+    name: "{{ dbname }}"
+    state: import
+    target: /tmp/server.sql
+    login_user: "{{ dbuser }}"
+    login_password: "{{ dbpass }}"
+    login_unix_socket: /var/run/mysqld/mysqld.sock
