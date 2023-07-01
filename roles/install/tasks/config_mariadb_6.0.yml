@@ -33,7 +33,8 @@
     value: 1
     login_user: root
     login_password: password
-
+  ignore_errors: true
+  
 - name: Descomprimir archivo gz
   shell: zcat /usr/share/zabbix-sql-scripts/mysql/server.sql.gz > /tmp/server.sql
   args:
