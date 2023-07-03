@@ -11,3 +11,4 @@
       auth: "{{ zabbix_auth.json.result }}"
       id: 2
     validate_certs: no
+  delegate_to: localhost

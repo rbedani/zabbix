@@ -1,9 +1,7 @@
 ---
 - name: Obtener token de autenticacion en Zabbix
-  delegate_to: localhost
   include_tasks: get_token_zabbix.yml
 
 - name: Crear nuevo grupo en Zabbix
-  delegate_to: localhost
   include_tasks: add_group_name.yml
 
