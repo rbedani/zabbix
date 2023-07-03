@@ -1,0 +1,31 @@
+- name: Obtener token de autenticación en Zabbix
+  uri:
+    url: "{{ zabbix_api_url }}"
+    method: POST
+    body_format: json
+    body:
+      jsonrpc: "2.0"
+      method: "user.login"
+      params:
+        user: "{{ zabbix_api_user }}"
+        password: "{{ zabbix_api_pass }}"
+      id: 1
+      auth: null
+    validate_certs: no
+  register: zabbix_auth
+  delegate_to: localhost
+
+- name: Crear nuevo grupo en Zabbix
+  uri:
+    url: "{{ zabbix_api_url }}"
+    method: POST
+    body_format: json
+    body:
+      jsonrpc: "2.0"
+      method: "hostgroup.create"
+      params:
+        name: "{{ add_group_name }}"
+      auth: "{{ zabbix_auth.json.result }}"
+      id: 2
+    validate_certs: no
+  delegate_to: localhost

@@ -27,13 +27,13 @@
     append_privs: yes
     login_unix_socket: /var/run/mysqld/mysqld.sock
 
-#- name: Habilitar log_bin_trust_function_creators
-#  mysql_global_variables:
-#    name: log_bin_trust_function_creators
-#    value: 1
-#    login_user: root
-#    login_password: password
-  
+- name: Habilitar log_bin_trust_function_creators
+  mysql_global_variables:
+    login_user: root
+    login_password: "{{ ansible_ssh_pass }}"
+    name: log_bin_trust_function_creators
+    value: 1
+
 - name: Descomprimir archivo gz
   shell: zcat /usr/share/zabbix-sql-scripts/mysql/server.sql.gz > /tmp/server.sql
   args:

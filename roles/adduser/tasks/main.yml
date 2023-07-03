@@ -1,34 +1,24 @@
----
-- name: Crear usuario en Zabbix
-  gather_facts: False
+- name: Crear usuario
+  uri:
+    url: "{{ zabbix_api_url }}"
+    method: POST
+    body_format: json
+    headers:
+      Content-Type: "application/json-rpc"
+    body:
+      jsonrpc: "2.0"
+      method: "user.create"
+      params:
+        user:
+          alias: "nuevo_usuario"
+          name: "nuevo_usuario"
+          passwd: "contraseña_usuario"
+          usrgrps:
+            - usrgrpid: 7  # ID del grupo al que pertenecerá el usuario
+      auth: "{{ zabbix_api_auth }}"
+      id: 1
+  register: response
 
-  vars:
-    zabbix_api_url: "http://tu_servidor_zabbix/api_jsonrpc.php"
-    zabbix_api_user: "tu_usuario_administrador"
-    zabbix_api_password: "tu_contraseña_administrador"
-
-  tasks:
-    - name: Crear usuario
-      uri:
-        url: "{{ zabbix_api_url }}"
-        method: POST
-        body_format: json
-        headers:
-          Content-Type: "application/json-rpc"
-        body:
-          jsonrpc: "2.0"
-          method: "user.create"
-          params:
-            user:
-              alias: "nuevo_usuario"
-              name: "nuevo_usuario"
-              passwd: "contraseña_usuario"
-              usrgrps:
-                - usrgrpid: 7  # ID del grupo al que pertenecerá el usuario
-          auth: "{{ zabbix_api_auth }}"
-          id: 1
-      register: response
-
-    - name: Mostrar respuesta
-      debug:
-        var: response
+- name: Mostrar respuesta
+  debug:
+    var: response

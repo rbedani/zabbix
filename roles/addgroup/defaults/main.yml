@@ -1,0 +1,6 @@
+# configuracion de API zabbix
+
+zabbix_api_url: "http://172.30.214.31/zabbix/api_jsonrpc.php"
+zabbix_api_user: "Admin"
+zabbix_api_pass: "zabbix"
+
