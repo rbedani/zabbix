@@ -13,4 +13,4 @@
       auth: null
     validate_certs: no
   register: zabbix_auth
-  delegate_to: localhost
+
