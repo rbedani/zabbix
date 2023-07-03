@@ -5,12 +5,16 @@ Organizacion del proyecto:
 ```shell
 zabbix/
 ├── README.md
-├── playbooks
 ├── roles
+│   ├── adduser
+│   │   └── tasks
+│   │       └── main.yml
 │   ├── install
 │   │   ├── tasks
 │   │   │   ├── config_locale_en_US.UTF-8.yml
-│   │   │   ├── config_mariadb.yml
+│   │   │   ├── config_mariadb_6.0.yml
+│   │   │   ├── config_mariadb_6.4.yml
+│   │   │   ├── config_mariadb_7.0.yml
 │   │   │   ├── config_php-cgi.yml
 │   │   │   ├── import_config_zabbix.yml
 │   │   │   ├── import_php_config.yml
@@ -27,7 +31,8 @@ zabbix/
 │   │   └── templates
 │   │       ├── php.ini.j2
 │   │       └── zabbix_server.conf.j2
-│   └── remove
+│   ├── remove
+│   └── status
 └── run.yml
 ```
 
@@ -43,10 +48,16 @@ ansible-playbook run.yml -e "Install=true" -e "dbname=" -e "dbuser=" -e "dbpass=
 | dbname= | insertar el nombre de la base de datos |
 | dbuser= | insertar el nombre del usuario para la base de datos |
 | dbpass= | insertar el password para usuario de la base de datos |
+| version= | indica la version que necesita instalar |
 | adduser= | permite crear un usuario en una instancia ya pre-instalada de zabbix |
 | add_user_name= | permite crear un usuario en una instancia ya pre-instalada de zabbix |
 | add_user_pass= | define la password del usuario que desea agregar |
 
+| Version | Instalacion |
+| --------- | --------- |
+| 6.0 | Pass... |
+| 6.4 | Pending.. |
+| 7.0 | Pass... |
 
 Sistema Operativos soportados:
 ---
