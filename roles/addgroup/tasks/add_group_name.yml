@@ -8,6 +8,7 @@
       method: "hostgroup.create"
       params:
         name: "{{ add_group_name }}"
+        flags: "{{ add_group_enable }}"
       auth: "{{ zabbix_auth.json.result }}"
       id: 2
     validate_certs: no
