@@ -38,7 +38,7 @@ zabbix/
 
 EJEMPLO MODO DE USO:
 ---
-ansible-playbook run.yml -e "Install=true" -e "dbname=" -e "dbuser=" -e "dbpass="
+ansible-playbook run.yml -e "Install=true" -e "dbname=zabbix" -e "dbuser=zabbix" -e "dbpass=zabbix" -e "version=6.0"
 
 | Argumentos | Detalles |
 | --------- | --------- |
