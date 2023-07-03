@@ -8,31 +8,26 @@
   tasks:
 
   - name: Install
-    become: yes
     include_role:
       name: install
     when: tasks_type == "install"
 
   - name: Remove
-    become: yes
     include_role:
       name: remove
     when: tasks_type == "remove"
 
   - name: Status
-    become: yes
     include_role:
       name: status
     when: tasks_type == "status"
 
   - name: Addgroup
-    gather_facts: false
     include_role:
       name: addgroup
     when: tasks_type == "addgroup"
 
   - name: Adduser
-    gather_facts: false
     include_role:
       name: adduser
     when: tasks_type == "adduser"
