@@ -1,0 +1,16 @@
+- name: Obtener ID del grupo "Frontend access"
+  uri:
+    url: "{{ zabbix_api_url }}"
+    method: POST
+    body_format: json
+    body:
+      jsonrpc: "2.0"
+      method: "hostgroup.get"
+      params:
+        output: "extend"
+        filter:
+          name: "Frontend access"
+      auth: "{{ zabbix_auth.json.result }}"
+      id: 2
+    validate_certs: no
+  register: zabbix_group_frontend
