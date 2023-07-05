@@ -9,7 +9,7 @@
     zabbix_group_name: "migrupo"
     zabbix_group_enable: 0  # 0 para deshabilitar, 1 para habilitar
     zabbix_group_internal: 1  # 1 para grupo interno, 0 para externo
-    zabbix_group_front_end: "0"  # "0" para "System default"
+    zabbix_group_front_end: 1  # "0" para "System default"
 
   tasks:
     - name: Obtener token de autenticación en Zabbix
