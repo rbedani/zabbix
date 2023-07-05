@@ -1,6 +1,6 @@
 ---
 - name: Crear nuevo grupo en Zabbix
-  hosts: localhost
+  hosts: all
   become: true
   vars:
     zabbix_api_url: "http://172.30.214.31/zabbix/api_jsonrpc.php"
