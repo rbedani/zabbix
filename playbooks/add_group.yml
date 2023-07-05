@@ -42,6 +42,10 @@
         validate_certs: no
       register: zabbix_group_frontend
 
+    - name: Depurar salida de obtención del grupo "System default"
+      debug:
+        var: zabbix_group_frontend
+
     - name: Crear nuevo grupo en Zabbix
       uri:
         url: "{{ zabbix_api_url }}"
