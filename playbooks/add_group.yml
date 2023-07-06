@@ -1,65 +1,65 @@
 ---
-- name: Crear nuevo grupo en Zabbix
+- name: Crear grupo de usuarios en Zabbix
   hosts: localhost
-  become: true
+  gather_facts: no
+
   vars:
     zabbix_api_url: "http://172.30.214.31/zabbix/api_jsonrpc.php"
-    zabbix_username: "Admin"
-    zabbix_password: "zabbix"
-    zabbix_group_name: "migrupo"
+    zabbix_api_user: "Admin"
+    zabbix_api_pass: "zabbix"
+
+    user_group_name: "MiGrupoDeUsuarios"
+    hostgroup_permissions:
+      - hostgroupid: "1"  # ID del grupo de hosts
+        permission: 2     # 0 - sin acceso, 2 - lectura, 3 - escritura
+    templategroup_permissions:
+      - templategroupid: "1"  # ID del grupo de plantillas
+        permission: 2          
 
   tasks:
-    - name: Obtener token de autenticación en Zabbix
+    - name: Obtener token de autenticación de la API de Zabbix
       uri:
         url: "{{ zabbix_api_url }}"
         method: POST
+        body: |
+          {
+            "jsonrpc": "2.0",
+            "method": "user.login",
+            "params": {
+              "user": "{{ zabbix_api_user }}",
+              "password": "{{ zabbix_api_pass }}"
+            },
+            "id": 1,
+            "auth": null
+          }
         body_format: json
-        body:
-          jsonrpc: "2.0"
-          method: "user.login"
-          params:
-            user: "{{ zabbix_username }}"
-            password: "{{ zabbix_password }}"
-          id: 1
-          auth: null
-        validate_certs: no
-      register: zabbix_auth
+        headers:
+          Content-Type: "application/json"
+      register: auth_result
 
-    - name: Obtener ID del grupo "System default"
+    - name: Crear grupo de usuarios en Zabbix
       uri:
         url: "{{ zabbix_api_url }}"
         method: POST
+        body: |
+          {
+            "jsonrpc": "2.0",
+            "method": "usergroup.create",
+            "params": {
+              "name": "{{ user_group_name }}",
+              "rights": {
+                "permission": 2,
+                "hostgroup": {{ hostgroup_permissions | to_json }},
+                "template": {{ templategroup_permissions | to_json }}
+              }
+            },
+            "id": 2,
+            "auth": "{{ auth_result.json.result }}"
+          }
         body_format: json
-        body:
-          jsonrpc: "2.0"
-          method: "hostgroup.get"
-          params:
-            output: "extend"
-            filter:
-              name: "System default"
-          auth: "{{ zabbix_auth.json.result }}"
-          id: 2
-        validate_certs: no
-      register: zabbix_group_frontend
+        headers:
+          Content-Type: "application/json"
+      register: create_result
 
-    - name: Depurar salida de obtención del grupo "System default"
-      debug:
-        var: zabbix_group_frontend
-
-    - name: Crear nuevo grupo en Zabbix
-      uri:
-        url: "{{ zabbix_api_url }}"
-        method: POST
-        body_format: json
-        body:
-          jsonrpc: "2.0"
-          method: "hostgroup.create"
-          params:
-            name: "{{ zabbix_group_name }}"
-            flags: 0
-            internal: 1
-            groupids:
-              - "{{ zabbix_group_frontend.json.result[0].groupid }}"
-          auth: "{{ zabbix_auth.json.result }}"
-          id: 3
-        validate_certs: no
+    - debug:
+        var: create_result.json
