@@ -45,13 +45,9 @@
             hostgroup_rights:
               - id: "{{ hostgroup_id }}"
                 permission: "{{ permission }}"
-          id: 2
+          id: 1
       register: create_group_result
 
     - name: Mostrar resultado de la creación del grupo
       debug:
         var: create_group_result.json
-
-    - name: Mostrar resultado token
-      debug:
-        var: auth_result
