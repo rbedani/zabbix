@@ -51,3 +51,7 @@
     - name: Mostrar resultado de la creación del grupo
       debug:
         var: create_group_result.json
+
+    - name: Mostrar resultado token
+      debug:
+        var: auth_result
