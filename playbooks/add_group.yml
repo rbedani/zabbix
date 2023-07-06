@@ -10,12 +10,8 @@
 
     user_group_name: "MiGrupoDeUsuarios"
     hostgroup_permissions:
-      - hostgroupid: "1"  # ID del grupo de hosts
+      - groupid: "1"  # ID del grupo de hosts
         permission: 2     # 0 - sin acceso, 2 - lectura, 3 - escritura
-    templategroup_permissions:
-      - groupid: "1"  # ID del grupo de plantillas
-        permission: 2
-    tag_filters: []
     users:
       - userid: "1"
 
@@ -50,13 +46,14 @@
             "method": "usergroup.create",
             "params": {
               "name": "{{ user_group_name }}",
-              "rights": {
-                "permission": 2,
-                "hostgroup_rights": {{ hostgroup_permissions | to_json }},
-                "templategroup_rights": {{ templategroup_permissions | to_json }},
-                "tag_filters": {{ tag_filters | to_json }}
-              },
-              "users": {{ users | to_json }}
+              "rights": [
+                {
+                  "permission": 2,
+                  "groupid": "{{ hostgroup_permissions[0].groupid }}"
+                }
+              ],
+              "users": {{ users | to_json }},
+              "tag_filters": {}
             },
             "auth": "{{ auth_result.json.result }}",
             "id": 2
