@@ -7,143 +7,42 @@
     zabbix_api_url: "http://172.30.214.31/zabbix/api_jsonrpc.php"
     zabbix_api_user: "Admin"
     zabbix_api_pass: "zabbix"
-
-    user_group_name: "MiGrupoDeUsuarios"
-    hostgroup_name: "MiGrupoDeHosts"
-    templategroup_name: "MiGrupoDePlantillas"
+    add_group_name: "migrupo"
 
   tasks:
-    - name: Obtener token de autenticación de la API de Zabbix
+    - name: Obtener token de autenticación de Zabbix API
       uri:
         url: "{{ zabbix_api_url }}"
         method: POST
-        body: |
-          {
-            "jsonrpc": "2.0",
-            "method": "user.login",
-            "params": {
-              "user": "{{ zabbix_api_user }}",
-              "password": "{{ zabbix_api_pass }}"
-            },
-            "id": 1,
-            "auth": null
-          }
-        body_format: json
         headers:
-          Content-Type: "application/json"
+          Content-Type: application/json-rpc
+        body_format: json
+        body:
+          jsonrpc: "2.0"
+          method: user.login
+          params:
+            user: "{{ zabbix_api_user }}"
+            password: "{{ zabbix_api_pass }}"
+          id: 1
       register: auth_result
+      no_log: true
 
     - name: Crear grupo de usuarios en Zabbix
       uri:
         url: "{{ zabbix_api_url }}"
         method: POST
-        body: |
-          {
-            "jsonrpc": "2.0",
-            "method": "usergroup.create",
-            "params": {
-              "name": "{{ user_group_name }}"
-            },
-            "auth": "{{ auth_result.json.result }}",
-            "id": 2
-          }
-        body_format: json
         headers:
-          Content-Type: "application/json"
-      register: create_result
-
-    - name: Obtener ID del grupo de hosts
-      uri:
-        url: "{{ zabbix_api_url }}"
-        method: POST
-        body: |
-          {
-            "jsonrpc": "2.0",
-            "method": "hostgroup.get",
-            "params": {
-              "filter": {
-                "name": "{{ hostgroup_name }}"
-              }
-            },
-            "auth": "{{ auth_result.json.result }}",
-            "id": 3
-          }
+          Content-Type: application/json-rpc
+          Authorization: "Bearer {{ auth_result.json.result }}"
         body_format: json
-        headers:
-          Content-Type: "application/json"
-      register: hostgroup_result
+        body:
+          jsonrpc: "2.0"
+          method: usergroup.create
+          params:
+            name: "{{ add_group_name }}"
+          id: 2
+      register: create_group_result
 
-    - name: Obtener ID del grupo de plantillas
-      uri:
-        url: "{{ zabbix_api_url }}"
-        method: POST
-        body: |
-          {
-            "jsonrpc": "2.0",
-            "method": "templategroup.get",
-            "params": {
-              "filter": {
-                "name": "{{ templategroup_name }}"
-              }
-            },
-            "auth": "{{ auth_result.json.result }}",
-            "id": 4
-          }
-        body_format: json
-        headers:
-          Content-Type: "application/json"
-      register: templategroup_result
-
-    - name: Asignar permisos de grupo de hosts al grupo de usuarios
-      uri:
-       ```yaml
-        url: "{{ zabbix_api_url }}"
-        method: POST
-        body: |
-          {
-            "jsonrpc": "2.0",
-            "method": "usergroup.massadd",
-            "params": {
-              "usrgrpids": [ "{{ create_result.json.result.usrgrpids[0] }}" ],
-              "rights": {
-                "permission": 2,
-                "id": [ "{{ hostgroup_result.json.result[0].groupid }}" ]
-              }
-            },
-            "auth": "{{ auth_result.json.result }}",
-            "id": 5
-          }
-        body_format: json
-        headers:
-          Content-Type: "application/json"
-      register: assign_hostgroup_result
-
-    - name: Asignar permisos de grupo de plantillas al grupo de usuarios
-      uri:
-        url: "{{ zabbix_api_url }}"
-        method: POST
-        body: |
-          {
-            "jsonrpc": "2.0",
-            "method": "usergroup.massadd",
-            "params": {
-              "usrgrpids": [ "{{ create_result.json.result.usrgrpids[0] }}" ],
-              "rights": {
-                "permission": 2,
-                "id": [ "{{ templategroup_result.json.result[0].groupid }}" ]
-              }
-            },
-            "auth": "{{ auth_result.json.result }}",
-            "id": 6
-          }
-        body_format: json
-        headers:
-          Content-Type: "application/json"
-      register: assign_templategroup_result
-
-    - debug:
-        var: create_result.json
-    - debug:
-        var: assign_hostgroup_result.json
-    - debug:
-        var: assign_templategroup_result.json
+    - name: Mostrar resultado de la creación del grupo
+      debug:
+        var: create_group_result.json
