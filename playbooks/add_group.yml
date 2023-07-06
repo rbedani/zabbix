@@ -49,7 +49,7 @@
               "name": "{{ user_group_name }}",
               "rights": {
                 "permission": 2,
-                "hostgroup": {{ hostgroup_permissions | to_json }},
+                "hostgroup_rights": {{ hostgroup_permissions | to_json }},
                 "template": {{ templategroup_permissions | to_json }}
               }
             },
