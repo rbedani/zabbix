@@ -1,0 +1,20 @@
+- name: Obtener lista de roles disponibles
+  uri:
+    url: "{{ zabbix_api_url }}"
+    method: POST
+    body_format: json
+    body:
+      jsonrpc: "2.0"
+      method: "role.get"
+      params:
+        output: ["roleid", "name"]
+      auth: "{{ auth_token_result.json.result }}"
+      id: 1
+    headers:
+      Content-Type: "application/json-rpc"
+    return_content: yes
+    validate_certs: no
+  register: role_result
+
+- debug:
+    var: role_result.json.result

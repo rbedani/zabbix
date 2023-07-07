@@ -1,0 +1,31 @@
+- name: Crear el usuario en Zabbix
+  uri:
+    url: "{{ zabbix_api_url }}"
+    method: POST
+    body_format: json
+    body:
+      jsonrpc: "2.0"
+      method: "user.create"
+      params:
+        username: "{{ add_user_name }}"
+        passwd: "{{ add_user_pass }}"
+        roleid: "{{ user_role_id }}"  # ID del rol del usuario
+        usrgrps:
+          - usrgrpid: "{{ group_result.json.result[0].usrgrpid }}"
+        medias:
+          - mediatypeid: "1"
+            sendto:
+              - "{{ add_user_email }}"
+            active: 0
+            severity: 63
+            period: "1-7,00:00-24:00"
+      auth: "{{ auth_token_result.json.result }}"
+      id: 1
+    headers:
+      Content-Type: "application/json-rpc"
+    return_content: yes
+    validate_certs: no
+  register: create_user_result
+
+- debug:
+    var: create_user_result.json

@@ -1,6 +1,0 @@
----
-- name: Obtener token de autenticacion en Zabbix
-  include_tasks: get_token_zabbix.yml
-
-- name: Crear nuevo grupo de usuarios en Zabbix
-  include_tasks: add_group_user.yml

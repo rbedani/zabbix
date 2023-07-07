@@ -1,0 +1,19 @@
+- name: Obtener ID del grupo de usuarios
+  uri:
+    url: "{{ zabbix_api_url }}"
+    method: POST
+    body_format: json
+    body:
+      jsonrpc: "2.0"
+      method: "usergroup.get"
+      params:
+        output: ["usrgrpid"]
+        filter:
+          name: "{{ add_group_name }}"
+      auth: "{{ auth_token_result.json.result }}"
+      id: 1
+    headers:
+      Content-Type: "application/json-rpc"
+    return_content: yes
+    validate_certs: no
+  register: group_result

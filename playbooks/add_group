@@ -4,10 +4,10 @@
   gather_facts: false
 
   vars:
-    api_url: "http://172.30.214.31/zabbix/api_jsonrpc.php"
-    api_user: "Admin"
-    api_pass: "zabbix"
-    group_name: "demo1"
+    api_url: ""
+    api_user: ""
+    api_pass: ""
+    group_name: ""
 
   tasks:
     - name: Obtener token de autenticación

@@ -6,25 +6,25 @@
 
   - name: Install
     include_role:
-      name: install
+      name: zabbix_install_server
     when: tasks_type == "install"
 
   - name: Remove
     include_role:
-      name: remove
+      name: zabbix_remove_server
     when: tasks_type == "remove"
 
   - name: Status
     include_role:
-      name: status
+      name: zabbix_status_server
     when: tasks_type == "status"
 
   - name: Add group user
     include_role:
-      name: add_group_user
+      name: administration_add_group_user
     when: tasks_type == "add_group_user"
 
   - name: Add user
     include_role:
-      name: add_user
+      name: administration_add_user
     when: tasks_type == "add_user"
