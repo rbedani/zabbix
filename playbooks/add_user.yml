@@ -1,0 +1,57 @@
+---
+- name: Crear usuario administrador en Zabbix
+  hosts: localhost
+  gather_facts: no
+
+  vars:
+    zabbix_api_url: "http://172.30.214.31/zabbix/api_jsonrpc.php"
+    zabbix_api_user: "Admin"
+    zabbix_api_pass: "zabbix"
+    add_user_name: "ansible"
+    add_user_pass: "!AlfaUno"
+    add_group_name: "flexxibleit"
+
+  tasks:
+    - name: Obtener token de autenticación
+      uri:
+        url: "{{ zabbix_api_url }}"
+        method: POST
+        body_format: json
+        body:
+          jsonrpc: "2.0"
+          method: "user.login"
+          params:
+            user: "{{ zabbix_api_user }}"
+            password: "{{ zabbix_api_pass }}"
+          auth: null
+          id: 1
+        headers:
+          Content-Type: "application/json-rpc"
+        return_content: yes
+        validate_certs: no
+      register: auth_token_result
+
+    - name: Crear el usuario en Zabbix
+      uri:
+        url: "{{ zabbix_api_url }}"
+        method: POST
+        body_format: json
+        body:
+          jsonrpc: "2.0"
+          method: "user.create"
+          params:
+            user:
+              alias: "{{ add_user_name }}"
+              passwd: "{{ add_user_pass }}"
+              usrgrps:
+                - usrgrpid: "{{ lookup('zabbix_group', add_group_name, url=zabbix_api_url, token=auth_token_result.json.result) }}"
+          auth: "{{ auth_token_result.json.result }}"
+          id: 1
+        headers:
+          Content-Type: "application/json-rpc"
+        return_content: yes
+        validate_certs: no
+      register: create_user_result
+
+    - debug:
+        var: create_user_result.json

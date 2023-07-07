@@ -1,0 +1,24 @@
+- name: Crear grupo en Zabbix
+  uri:
+    url: "{{ zabbix_api_url }}"
+    method: POST
+    body_format: json
+    body:
+      jsonrpc: "2.0"
+      method: "usergroup.create"
+      params:
+        name: "{{ add_group_name }}"
+      auth: "{{ auth_response.json.result }}"
+      id: 1
+    headers:
+      Content-Type: "application/json"
+  register: group_response
+
+- name: Verificar la respuesta de creación de grupo
+  fail:
+    msg: "Error al crear el grupo de usuarios: {{ group_response.json.error.message }}. Verificar si ya existe"
+  when: group_response.json.error is defined
+
+- name: Mostrar el ID del grupo creado
+  debug:
+    msg: "Grupo de usuarios creado exitosamente. ID del grupo de usuarios: {{ group_response.json.result.usrgrpids[0] }}"
