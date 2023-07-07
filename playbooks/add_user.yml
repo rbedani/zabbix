@@ -10,7 +10,7 @@
     add_user_name: "ansible"
     add_user_pass: "!AlfaUno"
     add_group_name: "flexxibleit"
-    user_role: "5"  # ID del rol del usuario administrador
+    user_role: "1"  # ID del rol del usuario administrador
 
   tasks:
     - name: Obtener token de autenticación
