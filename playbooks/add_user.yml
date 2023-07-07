@@ -63,7 +63,7 @@
           params:
             username: "{{ add_user_name }}"
             passwd: "{{ add_user_pass }}"
-            roleid: "{{ user_role }}"  # ID del rol del usuario
+#            roleid: "{{ user_role }}"  # ID del rol del usuario
             usrgrps:
               - usrgrpid: "{{ group_result.json.result[0].usrgrpid }}"
 #            medias:
