@@ -5,5 +5,8 @@
 - name: Obtener ID del grupo de usuarios
   include_tasks: get_group_user_id.yml
 
+- name: Obtener ID de rol de usuario
+  include_tasks: get_rol_user_id.yml
+
 - name: Crear nuevo usuario en Zabbix
   include_tasks: add_user.yml

@@ -1,0 +1,19 @@
+- name: Obtener ID rol de usuario
+  uri:
+    url: "{{ zabbix_api_url }}"
+    method: POST
+    body_format: json
+    body:
+      jsonrpc: "2.0"
+      method: "usergroup.get"
+      params:
+        output: ["roleid"]
+        filter:
+          name: "{{ role_name }}"
+      auth: "{{ auth_response.json.result }}"
+      id: 1
+    headers:
+      Content-Type: "application/json-rpc"
+    return_content: yes
+    validate_certs: no
+  register: role_result
