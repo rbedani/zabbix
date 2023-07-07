@@ -16,7 +16,7 @@
 
 - name: Verificar la respuesta de creación de grupo
   fail:
-    msg: "Error al crear el grupo de usuarios: {{ group_response.json.error.message }}"
+    msg: "Error al crear el grupo de usuarios: {{ group_response.json.error.message }}. Verificar si ya existe"
   when: group_response.json.error is defined
 
 - name: Mostrar el ID del grupo creado
