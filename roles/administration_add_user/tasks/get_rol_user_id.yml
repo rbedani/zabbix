@@ -17,3 +17,6 @@
     return_content: yes
     validate_certs: no
   register: role_result
+
+- debug:
+    var: role_result.json.result

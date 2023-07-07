@@ -10,7 +10,8 @@
         username: "{{ add_user_name }}"
         passwd: "{{ add_user_pass }}"
         #roleid: "{{ user_role_id }}"  # ID del rol del usuario
-        roleid: "{{ role_result.json.result[0].roleid }}"
+        roleids:
+          - roleid: "{{ role_result.json.result[0].roleid }}"
         usrgrps:
           - usrgrpid: "{{ group_result.json.result[0].usrgrpid }}"
         medias:
