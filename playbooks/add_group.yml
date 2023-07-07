@@ -1,53 +1,57 @@
 ---
-- name: Crear grupo de usuarios en Zabbix
+- name: Crear grupo en Zabbix
   hosts: localhost
-  gather_facts: no
+  gather_facts: false
 
   vars:
-    zabbix_api_url: "http://172.30.214.31/zabbix/api_jsonrpc.php"
-    zabbix_api_user: "Admin"
-    zabbix_api_pass: "zabbix"
-    add_group_name: "migrupo"
-    hostgroup_id: "2"
-    permission: 0
+    api_url: "http://172.30.214.31/zabbix/api_jsonrpc.php"
+    api_user: "Admin"
+    api_pass: "zabbix"
+    group_name: "flexxibleit"
 
   tasks:
-    - name: Obtener token de autenticación de Zabbix API
+    - name: Obtener token de autenticación
       uri:
-        url: "{{ zabbix_api_url }}"
+        url: "{{ api_url }}"
         method: POST
-        headers:
-          Content-Type: application/json-rpc
         body_format: json
         body:
           jsonrpc: "2.0"
-          method: user.login
+          method: "user.login"
           params:
-            user: "{{ zabbix_api_user }}"
-            password: "{{ zabbix_api_pass }}"
+            user: "{{ api_user }}"
+            password: "{{ api_pass }}"
           id: 1
-      register: auth_result
-      no_log: true
-
-    - name: Crear grupo de usuarios en Zabbix
-      uri:
-        url: "{{ zabbix_api_url }}"
-        method: POST
         headers:
-          Content-Type: application/json-rpc
-          Authorization: "Bearer {{ auth_result.json.result }}"
+          Content-Type: "application/json"
+      register: auth_response
+
+    - name: Verificar la respuesta de autenticación
+      fail:
+        msg: "Error: {{ auth_response.json.error.message }}"
+      when: auth_response.json.error is defined
+
+    - name: Crear grupo en Zabbix
+      uri:
+        url: "{{ api_url }}"
+        method: POST
         body_format: json
         body:
           jsonrpc: "2.0"
-          method: usergroup.create
+          method: "usergroup.create"
           params:
-            name: "{{ add_group_name }}"
-            hostgroup_rights:
-              - id: "{{ hostgroup_id }}"
-                permission: "{{ permission }}"
+            name: "{{ group_name }}"
+          auth: "{{ auth_response.json.result }}"
           id: 1
-      register: create_group_result
+        headers:
+          Content-Type: "application/json"
+      register: group_response
 
-    - name: Mostrar resultado de la creación del grupo
+    - name: Verificar la respuesta de creación de grupo
+      fail:
+        msg: "Error al crear el grupo de usuarios: {{ group_response.json.error.message }}"
+      when: group_response.json.error is defined
+
+    - name: Mostrar el ID del grupo creado
       debug:
-        var: create_group_result.json
+        msg: "Grupo de usuarios creado exitosamente. ID del grupo de usuarios: {{ group_response.json.result.usrgrpids[0] }}"
