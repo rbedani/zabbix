@@ -7,7 +7,7 @@
       jsonrpc: "2.0"
       method: "role.get"
       params:
-        output: ["roleid"]
+        output: ["roleid", "name"]
         filter:
           name: "{{ role_name }}"
       auth: "{{ auth_response.json.result }}"
