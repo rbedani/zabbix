@@ -20,3 +20,14 @@
 
 - debug:
     var: role_result.json.result
+
+- name: Buscar ID del rol por nombre
+  set_fact:
+    add_role_id: "{{ (role_result.json.result | selectattr('name', 'equalto', add_role_name) | list)[0].roleid }}"
+  vars:
+    add_role_name: "{{ add_role_name }}"
+  when: role_result.json.result | selectattr('name', 'equalto', add_role_name) | list | count > 0
+
+- fail:
+    msg: "El rol '{{ add_role_name }}' no fue encontrado en Zabbix."
+  when: add_role_id is undefined
