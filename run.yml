@@ -22,12 +22,12 @@
       name: status
     when: tasks_type == "status"
 
-  - name: Addgroup
+  - name: Add group user
     include_role:
-      name: addgroup
-    when: tasks_type == "addgroup"
+      name: add_group_user
+    when: tasks_type == "add_group_user"
 
-  - name: Adduser
+  - name: Add user
     include_role:
-      name: adduser
-    when: tasks_type == "adduser"
+      name: add_user
+    when: tasks_type == "add_user"

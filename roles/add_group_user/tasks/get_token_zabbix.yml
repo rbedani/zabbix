@@ -1,0 +1,20 @@
+- name: Obtener token de autenticación
+  uri:
+    url: "{{ zabbix_api_url }}"
+    method: POST
+    body_format: json
+    body:
+      jsonrpc: "2.0"
+      method: "user.login"
+      params:
+        user: "{{ zabbix_api_user }}"
+        password: "{{ zabbix_api_pass }}"
+      id: 1
+    headers:
+      Content-Type: "application/json"
+  register: auth_response
+
+- name: Verificar la respuesta de autenticación
+  fail:
+    msg: "Error: {{ auth_response.json.error.message }}"
+  when: auth_response.json.error is defined

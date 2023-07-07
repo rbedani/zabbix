@@ -2,9 +2,5 @@
 - name: Obtener token de autenticacion en Zabbix
   include_tasks: get_token_zabbix.yml
 
-- name: Obtener ID del grupo "Frontend access"
-  include_tasks: get_fronted_access.yml
-
-- name: Crear nuevo grupo en Zabbix
+- name: Crear nuevo grupo de usuarios en Zabbix
   include_tasks: add_group_name.yml
-
