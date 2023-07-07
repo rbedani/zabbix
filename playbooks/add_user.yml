@@ -10,6 +10,7 @@
     add_user_name: "ansible"
     add_user_pass: "!AlfaUno"
     add_group_name: "flexxibleit"
+    user_role: 1  # ID del rol del usuario administrador
 
   tasks:
     - name: Obtener token de autenticación
@@ -64,6 +65,9 @@
             passwd: "{{ add_user_pass }}"
             usrgrps:
               - usrgrpid: "{{ group_result.json.result[0].usrgrpid }}"
+            user_medias: []
+            user_type: 3  # Tipo de usuario: 3 para usuario administrador
+            roleid: "{{ user_role }}"  # ID del rol del usuario
           auth: "{{ auth_token_result.json.result }}"
           id: 1
         headers:
