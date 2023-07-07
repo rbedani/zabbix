@@ -7,7 +7,7 @@
     api_url: "http://172.30.214.31/zabbix/api_jsonrpc.php"
     api_user: "Admin"
     api_pass: "zabbix"
-    group_name: "flexxibleit"
+    group_name: "demo1"
 
   tasks:
     - name: Obtener token de autenticación
