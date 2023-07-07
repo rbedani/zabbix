@@ -1,6 +1,6 @@
 - name: Crear grupo en Zabbix
   uri:
-    url: "{{ api_url }}"
+    url: "{{ zabbix_api_url }}"
     method: POST
     body_format: json
     body:
