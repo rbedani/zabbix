@@ -10,7 +10,7 @@
     add_user_name: "ansible"
     add_user_pass: "!AlfaUno"
     add_group_name: "flexxibleit"
-    user_role: 1  # ID del rol del usuario administrador
+    user_role: "5"  # ID del rol del usuario administrador
 
   tasks:
     - name: Obtener token de autenticación
@@ -61,13 +61,18 @@
           jsonrpc: "2.0"
           method: "user.create"
           params:
-            alias: "{{ add_user_name }}"
+            username: "{{ add_user_name }}"
             passwd: "{{ add_user_pass }}"
+            roleid: "{{ user_role }}"  # ID del rol del usuario
             usrgrps:
               - usrgrpid: "{{ group_result.json.result[0].usrgrpid }}"
-            user_medias: []
-            user_type: 3  # Tipo de usuario: 3 para usuario administrador
-            roleid: "{{ user_role }}"  # ID del rol del usuario
+            medias:
+              - mediatypeid: "1"
+                sendto:
+                  - "support@company.com"
+                active: 0
+                severity: 63
+                period: "1-7,00:00-24:00"
           auth: "{{ auth_token_result.json.result }}"
           id: 1
         headers:
