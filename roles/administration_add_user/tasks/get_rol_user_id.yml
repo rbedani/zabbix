@@ -1,4 +1,4 @@
-- name: Obtener ID rol de usuario
+- name: Obtener roles de usuario
   uri:
     url: "{{ zabbix_api_url }}"
     method: POST
@@ -8,8 +8,6 @@
       method: "role.get"
       params:
         output: ["roleid", "name"]
-        filter:
-          name: "{{ role_name }}"
       auth: "{{ auth_response.json.result }}"
       id: 1
     headers:
@@ -18,14 +16,11 @@
     validate_certs: no
   register: role_result
 
-- debug:
-    var: role_result.json.result
-
 - name: Buscar ID del rol por nombre
   set_fact:
     role_id: "{{ (role_result.json.result | selectattr('name', 'equalto', role_name) | list)[0].roleid }}"
   vars:
-    add_role_name: "{{ role_name }}"
+    role_name: "{{ role_name }}"
   when: role_result.json.result | selectattr('name', 'equalto', role_name) | list | count > 0
 
 - fail:

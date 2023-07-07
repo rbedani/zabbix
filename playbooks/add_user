@@ -10,8 +10,7 @@
     add_user_name: ""
     add_user_pass: ""
     add_group_name: ""
-    add_user_email: ""
-    user_role_id: "2"  # "2 Admin role" "4 Guest role" "3 Super admin role" "1 User role"
+    role_name: ""
 
   tasks:
     - name: Obtener token de autenticación
@@ -53,6 +52,35 @@
         validate_certs: no
       register: group_result
 
+    - name: Obtener roles de usuario
+      uri:
+        url: "{{ zabbix_api_url }}"
+        method: POST
+        body_format: json
+        body:
+          jsonrpc: "2.0"
+          method: "role.get"
+          params:
+            output: ["roleid", "name"]
+          auth: "{{ auth_token_result.json.result }}"
+          id: 1
+        headers:
+          Content-Type: "application/json-rpc"
+        return_content: yes
+        validate_certs: no
+      register: role_result
+
+    - name: Buscar ID del rol por nombre
+      set_fact:
+        role_id: "{{ (role_result.json.result | selectattr('name', 'equalto', role_name) | list)[0].roleid }}"
+      vars:
+        role_name: "{{ role_name }}"
+      when: role_result.json.result | selectattr('name', 'equalto', role_name) | list | count > 0
+
+    - fail:
+        msg: "El rol '{{ role_name }}' no fue encontrado en Zabbix."
+      when: role_id is undefined
+
     - name: Crear el usuario en Zabbix
       uri:
         url: "{{ zabbix_api_url }}"
@@ -62,18 +90,11 @@
           jsonrpc: "2.0"
           method: "user.create"
           params:
-            username: "{{ add_user_name }}"
+            alias: "{{ add_user_name }}"
             passwd: "{{ add_user_pass }}"
-            roleid: "{{ user_role_id }}"  # ID del rol del usuario
             usrgrps:
               - usrgrpid: "{{ group_result.json.result[0].usrgrpid }}"
-            medias:
-              - mediatypeid: "1"
-                sendto:
-                  - "{{ add_user_email }}"
-                active: 0
-                severity: 63
-                period: "1-7,00:00-24:00"
+            roleid: "{{ role_id }}"
           auth: "{{ auth_token_result.json.result }}"
           id: 1
         headers:
