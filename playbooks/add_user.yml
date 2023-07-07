@@ -60,11 +60,10 @@
           jsonrpc: "2.0"
           method: "user.create"
           params:
-            user:
-              alias: "{{ add_user_name }}"
-              passwd: "{{ add_user_pass }}"
-              usrgrps:
-                - usrgrpid: "{{ group_result.json.result[0].usrgrpid }}"
+            alias: "{{ add_user_name }}"
+            passwd: "{{ add_user_pass }}"
+            usrgrps:
+              - usrgrpid: "{{ group_result.json.result[0].usrgrpid }}"
           auth: "{{ auth_token_result.json.result }}"
           id: 1
         headers:
