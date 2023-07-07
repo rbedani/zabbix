@@ -10,7 +10,7 @@
         output: ["usrgrpid"]
         filter:
           name: "{{ add_group_name }}"
-      auth: "{{ auth_token_result.json.result }}"
+      auth: "{{ auth_response.json.result }}"
       id: 1
     headers:
       Content-Type: "application/json-rpc"

@@ -19,7 +19,7 @@
             active: 0
             severity: 63
             period: "1-7,00:00-24:00"
-      auth: "{{ auth_token_result.json.result }}"
+      auth: "{{ auth_response.json.result }}"
       id: 1
     headers:
       Content-Type: "application/json-rpc"
