@@ -5,7 +5,7 @@
     body_format: json
     body:
       jsonrpc: "2.0"
-      method: "usergroup.get"
+      method: "role.get"
       params:
         output: ["roleid"]
         filter:
