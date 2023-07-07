@@ -66,7 +66,7 @@
             usrgrps:
               - usrgrpid: "{{ group_result.json.result[0].usrgrpid }}"
             user_medias: []
-            type: 3  # Tipo de usuario: 3 para usuario administrador
+            user_type: 3  # Tipo de usuario: 3 para usuario administrador
             roleid: "{{ user_role }}"  # ID del rol del usuario
           auth: "{{ auth_token_result.json.result }}"
           id: 1
