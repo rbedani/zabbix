@@ -1,7 +1,3 @@
-- name: Depurar valor de role_name
-  debug:
-    var: role_name
-
 - name: Filtrar ID del rol por nombre
   set_fact:
     role_id: "{{ (role_result.json.result | selectattr('name', 'equalto', role_name) | list)[0].roleid }}"
