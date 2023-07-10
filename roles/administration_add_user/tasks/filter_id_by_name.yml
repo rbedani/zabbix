@@ -5,9 +5,6 @@
     role_name: "{{ role_name }}"
   when: role_result.json.result | selectattr('name', 'equalto', role_name) | list | count > 0
 
-- debug:
-    var: role_id
-
 - fail:
     msg: El rol "{{ role_name }}" no fue encontrado en Zabbix.
   when: role_id is undefined
