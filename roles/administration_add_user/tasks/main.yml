@@ -9,15 +9,7 @@
   include_tasks: get_rol_user_id.yml
 
 - name: Filtrar ID del rol por nombre
-  set_fact:
-    role_id: "{{ (role_result.json.result | selectattr('name', 'equalto', role_name) | list)[0].roleid }}"
-  vars:
-    role_name: "{{ role_name }}"
-  when: role_result.json.result | selectattr('name', 'equalto', role_name) | list | count > 0
-
-- fail:
-    msg: El rol "{{ role_name }}" no fue encontrado en Zabbix.
-  when: role_id is undefined
+  include_tasks: filter_id_by_name.yml
 
 - name: Crear nuevo usuario en Zabbix
   include_tasks: add_user.yml
