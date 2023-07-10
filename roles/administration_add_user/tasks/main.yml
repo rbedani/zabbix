@@ -9,7 +9,7 @@
   include_tasks: get_rol_user_id.yml
 
 - name: Filtrar ID del rol por nombre
-  incluide_tasks: filter_id_by_name.yml
+  include_tasks: filter_id_by_name.yml
 
 - name: Crear nuevo usuario en Zabbix
   include_tasks: add_user.yml
