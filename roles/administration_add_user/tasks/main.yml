@@ -1,8 +1,4 @@
 ---
-- name: Depurar valor de role_name
-  debug:
-    var: zabbix_role_name
-
 - name: Obtener token de autenticacion en Zabbix
   include_tasks: get_token_zabbix.yml
 
